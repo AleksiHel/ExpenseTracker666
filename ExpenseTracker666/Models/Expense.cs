@@ -1,0 +1,23 @@
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+using System.ComponentModel.DataAnnotations;
+
+namespace ExpenseTracker666.Models
+{
+    public class Expense
+    {
+
+        public ObjectId _id { get; set; }
+        [Required]
+        public decimal Amount { get; set; }
+        [Required]
+        public string Description { get; set; }
+        [Required]
+        public DateTime ExpenseDate { get; set; }
+        [Required]
+        public ObjectId UserId { get; set; }
+        [Required]
+        public ObjectId CategoryId { get; set; }
+        
+    }
+}

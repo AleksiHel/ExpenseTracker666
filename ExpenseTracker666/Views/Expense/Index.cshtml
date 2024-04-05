@@ -1,0 +1,33 @@
+﻿<h1>Expenses</h1>
+<h5>
+    Overview of your expenses
+</h5>
+<p>Total Spending: </p>
+<p>Biggest single purchase: </p>
+<p>Most spent category: </p>
+<p>Average spending per day: </p>
+<a href="expense/add"><button type="button" class="btn btn-dark">Add new expense</button></a>
+<button type="button" class="btn btn-dark" id="all">Show all your purchases</button>
+<button type="button" class="action-btn btn-dark" id="graphs">Show cool graphs</button>
+
+<div id="render-container">
+
+    <partial name="_AllPurchases" />
+</div>
+
+<script>
+    $(".action-btn").on("click", function ()) {
+    var target = "";
+    if (this.id == "first") { target = "_AllPurchases"; }
+    if (target.length > 0) {
+        $.ajax({
+            type: 'post',
+            url: '/Partial/' + target,
+            success: function (data) {
+                $("#render-container").html(data);
+            }
+
+        });
+    }
+    });
+</script>

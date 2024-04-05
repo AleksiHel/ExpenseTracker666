@@ -1,0 +1,48 @@
+﻿
+
+<div class="container-sm p-3 " style="max-width: 500px;">
+    <h1 class="text-center">Add new expense</h1>
+    <form asp-controller="" asp-action="" method="post" class="d-flex flex-column">
+        <div class="form-group p-1 col-5">
+           
+            <label for="usernameInput">Amount</label>
+            <input type="number" name="amount" class="form-control" id="amountInput" placeholder="Enter amount" min="0">
+        </div>
+        <div class="form-group p-1 col-5">
+            <label for="dateInput">Date</label>
+            <input type="date" name="date" class="form-control" id="dateInput" placeholder="">
+        </div>
+        <div class="form-group p-1 col-5">
+            <label for="categorySelect">Category</label>
+            <select name="category" class="form-control" id="categorySelect">
+                <option value="" disabled selected>Select a category</option>
+                <option value="" disabled selected>Select a category</option>
+                <option value="" disabled selected>Select a category</option>
+                <option value="" disabled selected>Select a category</option>
+                <!-- Dynamically generated options will go here -->
+            </select>
+        </div>
+
+        <div class="form-group p-1">
+            <label for="descriptionInput">Description</label>
+            <textarea id="userDescription" name="description" class="form-control" rows="4"></textarea>
+        </div>
+
+
+
+
+        <button type="submit" class="btn btn-dark p-1 mt-1 mb-2 col-2">Save</button>
+
+    </form>
+</div>
+
+<script>
+    function toDateInputValue(dateObject) {
+        const local = new Date(dateObject);
+        local.setMinutes(dateObject.getMinutes() - dateObject.getTimezoneOffset());
+        return local.toJSON().slice(0, 10);
+    };
+
+    document.getElementById('dateInput').value = toDateInputValue(new Date());
+</script>
+
