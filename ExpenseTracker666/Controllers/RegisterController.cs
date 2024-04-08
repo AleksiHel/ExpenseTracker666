@@ -22,7 +22,7 @@ namespace ExpenseTracker666.Controllers
 
             var registerModel = new Users
             {
-                Name = model.Name,
+                Username = model.Username,
                 Password = model.Password
             };
 

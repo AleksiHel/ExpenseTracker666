@@ -6,34 +6,35 @@ using System.Reflection;
 
 namespace ExpenseTracker666.Models
 {
-        public class DatabaseManipulator
+    public class DatabaseManipulator
+    {
+        private static IConfiguration? config;
+        public static string? DATABASE_NAME;
+        private static string? HOST;
+        private static MongoServerAddress? address;
+        private static MongoClientSettings? settings;
+        private static MongoClient? client;
+        public static IMongoDatabase? database;
+        public static string? ConnectionString;
+
+
+
+        public static void Initialize(IConfiguration Configuration)
         {
-            private static IConfiguration? config;
-            public static string? DATABASE_NAME;
-            private static string? HOST;
-            private static MongoServerAddress? address;
-            private static MongoClientSettings? settings;
-            private static MongoClient? client;
-            public static IMongoDatabase? database;
-            public static string? ConnectionString;
+            config = Configuration;
+            var sections = config.GetSection("ConnectionStrings");
+            DATABASE_NAME = sections.GetValue<string>("DatabaseName");
+            HOST = sections.GetValue<string>("MongoConnection");
+            address = new MongoServerAddress(HOST);
+            settings = new MongoClientSettings() { Server = address };
+            client = new MongoClient(settings);
+            database = client.GetDatabase(DATABASE_NAME);
+            ConnectionString = $"mongodb://{HOST}:27017";
 
+        }
 
-
-            public static void Initialize(IConfiguration Configuration)
-            {
-                config = Configuration;
-                var sections = config.GetSection("ConnectionStrings");
-                DATABASE_NAME = sections.GetValue<string>("DatabaseName");
-                HOST = sections.GetValue<string>("MongoConnection");
-                address = new MongoServerAddress(HOST);
-                settings = new MongoClientSettings() { Server = address };
-                client = new MongoClient(settings);
-                database = client.GetDatabase(DATABASE_NAME);
-                ConnectionString = $"mongodb://{HOST}:27017";
-
-            }
-
-
+        // TODO
+        // Korjaa, buginen
         public static T Save<T>(T record)
         {
             try
@@ -42,13 +43,13 @@ namespace ExpenseTracker666.Models
                 var collection = database.GetCollection<T>(typeof(T).Name);
 
 
-                PropertyInfo nameProp = typeof(T).GetProperty("Name");
+                PropertyInfo nameProp = typeof(T).GetProperty("Username");
                 string nameValue = nameProp.GetValue(record)?.ToString();
 
                 // Luo filtteri ja hae onko taulussa
                 // pakko olla fiksumpi tapa? Ainakin searchia voisi käyttää apu metodina, mutta nyt ei jaksanut implementoida
                 // ehkä sitäkin parempi ja siistimpi tapa varmasti on
-                var filter = Builders<T>.Filter.Eq("Name", nameValue);
+                var filter = Builders<T>.Filter.Eq("Username", nameValue);
                 var existingRecord = collection.Find(filter).FirstOrDefault();
 
 
@@ -106,7 +107,7 @@ namespace ExpenseTracker666.Models
             {
                 // Assuming a 'Users' collection and it contains documents with 'Name' and 'Password' fields
                 var mongoCollection = database.GetCollection<BsonDocument>("Users");
-                var filter = Builders<BsonDocument>.Filter.Eq("Name", username) & Builders<BsonDocument>.Filter.Eq("Password", password);
+                var filter = Builders<BsonDocument>.Filter.Eq("Username", username) & Builders<BsonDocument>.Filter.Eq("Password", password);
 
                 var existingRecord = mongoCollection.Find(filter).FirstOrDefault();
 
@@ -122,17 +123,51 @@ namespace ExpenseTracker666.Models
 
 
         public static List<T> GetAll<T>(string table)
-            {
-                var mongotable = database.GetCollection<T>(table);
-                return mongotable.Find(new BsonDocument()).ToList();
-            }
+        {
+            var mongotable = database.GetCollection<T>(table);
+            return mongotable.Find(new BsonDocument()).ToList();
+        }
 
-            //public static T GetByObjectId<T>(string table, ObjectId id)
-            //{
-            //    var mongotable = database.GetCollection<T>(table);
-            //    var filter = Builders<T>.Filter.Eq("_id", id);
-            //    return mongotable.Find(filter).FirstOrDefault();
-            //}
+        public static ObjectId GetUsersID(string username)
+        {
+            var mongotable = database.GetCollection<Users>("Users");
+            var filter = Builders<Users>.Filter.Eq("Username", username);
+            var user =  mongotable.Find(filter).FirstOrDefault();
+
+            return user._id;
+        }
+
+        public static List<T> GetAllById<T>(ObjectId userID)
+        {
+            var mongotable = database.GetCollection<T>("Expenses");
+
+            var filter = Builders<T>.Filter.Eq("UserId", userID);
+            var testi = mongotable.Find(filter).ToList();
+            return testi;
+
+        }
+
+
+        //public static ObjectId(string username)
+        //{
+        //    var mongotable = database.GetCollection<T>(username);
+
+        //    var filter = Builders<T>.Filter.Eq("Name", username);
+
+        //    string testi;
+
+        //    mongotable = mongotable.Find(filter).ToList();
+
+
+        //}
+
+
+        //public static T GetByObjectId<T>(string table, ObjectId id)
+        //{
+        //    var mongotable = database.GetCollection<T>(table);
+        //    var filter = Builders<T>.Filter.Eq("_id", id);
+        //    return mongotable.Find(filter).FirstOrDefault();
+        //}
 
         ////    public static bool LogInChecker<T>(string username, string password)
         ////{
@@ -147,10 +182,10 @@ namespace ExpenseTracker666.Models
         ////    {
         ////        return false;
         ////    }
-            
-           
+
+
         ////}
-        }
+    }
 
         
     }

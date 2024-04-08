@@ -2,10 +2,12 @@
 {
     public class ExpenseViewModel
     {
-        public List<Category> Categories { get; set; } = new List<Category>();
-
-
-
-
+        public string Description { get; set; }
+        public decimal Amount { get; set; }
+        public DateTime ExpenseDate { get; set; }
+        public string UserName { get; set; } 
+        public string CategoryName { get; set; }
     }
+
+
 }

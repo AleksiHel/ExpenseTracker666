@@ -10,7 +10,7 @@ namespace ExpenseTracker666.Models
         [Required]
         [MinLength(3)]
         [MaxLength(10)]
-        public string Name { get; set; }
+        public string Username { get; set; }
 
         [Required]
         [DataType(DataType.Password)]

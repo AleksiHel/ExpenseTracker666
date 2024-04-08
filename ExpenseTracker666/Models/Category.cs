@@ -10,6 +10,6 @@ namespace ExpenseTracker666.Models
         [Required]
         [MinLength(3)]
         [MaxLength(20)]
-        public string Name { get; set; }
+        public string CategoryName { get; set; }
     }
 }

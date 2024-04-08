@@ -16,7 +16,7 @@ namespace ExpenseTracker666.Controllers
         {
             var model = new CategoryViewModel
             {
-                Categories = DatabaseManipulator.GetAll<Category>("Category").OrderBy(c => c.Name).ToList()
+                Categories = DatabaseManipulator.GetAll<Category>("Category").OrderBy(c => c.CategoryName).ToList()
                 //NewCategory = new Category() // Initialize if needed
             };
 
@@ -53,7 +53,7 @@ namespace ExpenseTracker666.Controllers
 
             var Category = new Category
             {
-                Name = model.NewCategory.Name,
+                CategoryName = model.NewCategory.CategoryName,
             };
 
             DatabaseManipulator.Save(Category);

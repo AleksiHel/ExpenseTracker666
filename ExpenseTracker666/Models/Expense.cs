@@ -15,8 +15,10 @@ namespace ExpenseTracker666.Models
         [Required]
         public DateTime ExpenseDate { get; set; }
         [Required]
+        [BsonRepresentation(BsonType.ObjectId)]
         public ObjectId UserId { get; set; }
         [Required]
+        [BsonRepresentation(BsonType.ObjectId)]
         public ObjectId CategoryId { get; set; }
         
     }

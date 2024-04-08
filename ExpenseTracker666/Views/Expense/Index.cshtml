@@ -1,33 +1,43 @@
-﻿<h1>Expenses</h1>
+﻿@model List<ExpenseViewModel>
+
+@{
+    var biggestPurchaseAmount = Model.Max(x => x.Amount);
+    var sumOfAll = Model.Sum(x => x.Amount);
+    var maxDate = Model.Max(x => x.ExpenseDate);
+    var minDate = Model.Min(x => x.ExpenseDate);
+    var testi = (maxDate - minDate).TotalDays;
+    var averageSpending = Math.Round(sumOfAll / ((decimal)testi +1), 2);
+
+
+
+
+}
+
+@foreach (var x in Model)
+{
+    <p>@x.CategoryName</p>
+}
+
+<h1>Expenses</h1>
 <h5>
     Overview of your expenses
 </h5>
-<p>Total Spending: </p>
-<p>Biggest single purchase: </p>
+<hr />
+<p>Total Spending: @(sumOfAll) €</p>
+<p>Biggest single purchase: @(biggestPurchaseAmount) €</p>
 <p>Most spent category: </p>
-<p>Average spending per day: </p>
+<p>Average spending per day: @(averageSpending) €</p>
 <a href="expense/add"><button type="button" class="btn btn-dark">Add new expense</button></a>
 <button type="button" class="btn btn-dark" id="all">Show all your purchases</button>
 <button type="button" class="action-btn btn-dark" id="graphs">Show cool graphs</button>
+<hr />
 
 <div id="render-container">
-
-    <partial name="_AllPurchases" />
+    <partial name="_AllPurchases" view-data="ViewData"/>
 </div>
 
 <script>
-    $(".action-btn").on("click", function ()) {
-    var target = "";
-    if (this.id == "first") { target = "_AllPurchases"; }
-    if (target.length > 0) {
-        $.ajax({
-            type: 'post',
-            url: '/Partial/' + target,
-            success: function (data) {
-                $("#render-container").html(data);
-            }
-
-        });
-    }
-    });
+    $(".action-btn").on("click", function () {
+        alert(this.id);
+    })
 </script>
