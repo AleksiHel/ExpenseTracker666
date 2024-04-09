@@ -33,7 +33,7 @@ namespace ExpenseTracker666.Controllers
 
 
         {
-            // Korjaa mebe
+            // Korjaa
             //var model2 = new CategoryViewModel
             //{
             //    Categories = DatabaseManipulator.GetAll<Category>("Category").OrderBy(c => c.Name).ToList()
@@ -43,12 +43,7 @@ namespace ExpenseTracker666.Controllers
 
             if (!ModelState.IsValid)
             {
-
-
                 return View(model);
-
-
-
             }
 
             var Category = new Category

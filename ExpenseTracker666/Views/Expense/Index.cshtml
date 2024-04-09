@@ -54,6 +54,10 @@
 <h5>
     Overview of your expenses
 </h5>
+
+@foreach (var x in Model) {
+    <p>@x.CategoryName, @x.CategoryId</p>
+}
 <hr />
 
 
@@ -67,7 +71,7 @@
     <p>Average spending per day: @(averageSpending) €</p> 
    <a href="expense/add"><button type="button" class="btn btn-dark">Add new expense</button></a>
     <button type="button" class="btn btn-dark" id="all">Show all your purchases</button>
-    <button type="button" class="action-btn btn-dark" id="graphs">Show cool graphs</button>  
+    <a href="expense/graphs"><button type="button" class="btn btn-dark">Show cool graphs</button></a>
 }
 
 

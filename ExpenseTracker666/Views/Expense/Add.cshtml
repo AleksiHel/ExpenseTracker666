@@ -1,4 +1,5 @@
-﻿
+﻿@model AddExpenseViewModel
+
 
 <div class="container-sm p-3 " style="max-width: 500px;">
     <h1 class="text-center">Add new expense</h1>
@@ -15,11 +16,11 @@
         <div class="form-group p-1 col-5">
             <label for="categorySelect">Category</label>
             <select name="category" class="form-control" id="categorySelect">
-                <option value="" disabled selected>Select a category</option>
-                <option value="" disabled selected>Select a category</option>
-                <option value="" disabled selected>Select a category</option>
-                <option value="" disabled selected>Select a category</option>
-                <!-- Dynamically generated options will go here -->
+            @foreach (var category in Model.Categories) {
+
+                    <option value="@Html.DisplayFor(modelItem => category.CategoryName)">@Html.DisplayFor(modelItem => category.CategoryName)</option>
+
+            }
             </select>
         </div>
 

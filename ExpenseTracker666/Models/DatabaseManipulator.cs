@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson;
+﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Core.Authentication;
 using System.Diagnostics.Eventing.Reader;
@@ -208,6 +209,15 @@ namespace ExpenseTracker666.Models
             var testi = mongotable.Find(filter).ToList();
             return testi;
 
+        }
+
+        public static ObjectId GetCategoryId(string categoryName)
+        {
+            var mongotable = database.GetCollection<Category>("Category");
+            var filter = Builders<Category>.Filter.Eq("CategoryName", categoryName);
+            var user = mongotable.Find(filter).FirstOrDefault();
+
+            return user._id;
         }
 
 

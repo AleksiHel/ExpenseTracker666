@@ -34,9 +34,10 @@ namespace ExpenseTracker666.Controllers
                 Description = expense.Description,
                 ExpenseDate = expense.ExpenseDate,
                 CategoryName = categoryDictionary[expense.CategoryId.ToString()],
-                UserName = User.Identity.Name
+                CategoryId = expense.CategoryId,
+                UserName = User.Identity.Name,
             }).ToList();
-
+            
             return View(expenseViewModels);
         }
 
@@ -44,7 +45,38 @@ namespace ExpenseTracker666.Controllers
         [Authorize]
         public IActionResult Add()
         {
+            var model = new AddExpenseViewModel();
 
+            return View(model);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> Add(AddExpenseViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            // formi kuntoon!!!!!!PERKELE
+
+            var Expense = new Expense
+            {
+                Amount = model.NewExpense.Amount,
+                Description = model.NewExpense.Description,
+                ExpenseDate = model.NewExpense.ExpenseDate,
+                UserId = loggedInUserId
+
+            };
+
+
+            return RedirectToAction("Index");
+        }
+
+        [Authorize]
+        public IActionResult Graphs()
+        {
             return View();
         }
 
