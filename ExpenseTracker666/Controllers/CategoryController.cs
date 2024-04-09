@@ -56,7 +56,7 @@ namespace ExpenseTracker666.Controllers
                 CategoryName = model.NewCategory.CategoryName,
             };
 
-            DatabaseManipulator.Save(Category);
+            DatabaseManipulator.SavetoCategory(Category);
 
 
             return RedirectToAction("Index");

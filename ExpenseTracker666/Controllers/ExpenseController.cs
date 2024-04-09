@@ -42,7 +42,7 @@ namespace ExpenseTracker666.Controllers
 
 
         [Authorize]
-        public IActionResult Add(string username, string password)
+        public IActionResult Add()
         {
 
             return View();

@@ -1,36 +1,78 @@
 ﻿@model List<ExpenseViewModel>
 
+
+
 @{
-    var biggestPurchaseAmount = Model.Max(x => x.Amount);
-    var sumOfAll = Model.Sum(x => x.Amount);
-    var maxDate = Model.Max(x => x.ExpenseDate);
-    var minDate = Model.Min(x => x.ExpenseDate);
-    var testi = (maxDate - minDate).TotalDays;
-    var averageSpending = Math.Round(sumOfAll / ((decimal)testi +1), 2);
+    decimal biggestPurchaseAmount = 0;
+    string biggestPurchaseCategory = "";
+    decimal sumOfAll = 0;
+    DateTime maxDate = @DateTime.Today;
+    DateTime minDate;
+    double testi = 0;
+    decimal averageSpending = 0;
+    decimal mostSpendAmount = 0;
+    decimal mostSpendCategoryAmount = 0;
+    string mostSpendCategory = "";
 
 
+    if (Model.Count != 0) {
+        biggestPurchaseAmount = Model.Max(x => x.Amount);
+        biggestPurchaseCategory = Model.Max(x => x.CategoryName);
 
 
+        sumOfAll = Model.Sum(x => x.Amount);
+        minDate = Model.Min(x => x.ExpenseDate);
+        testi = (maxDate - minDate).TotalDays;
+        averageSpending = Math.Round(sumOfAll / ((decimal)testi +1), 2);
+
+        var categorySums = Model
+            .GroupBy(x => x.CategoryName) // Assuming CategoryId uniquely identifies each category
+            .Select(group => new
+            {
+                CategoryName = group.First().CategoryName, // Assuming all items in the group have the same CategoryName
+                TotalAmount = group.Sum(x => x.Amount)
+            }).ToList();
+
+        // Iterate over each category sum to find the category with the highest total spend
+        foreach (var categorySum in categorySums)
+        {
+            if (categorySum.TotalAmount > mostSpendCategoryAmount)
+            {
+                mostSpendCategoryAmount = categorySum.TotalAmount;
+                mostSpendCategory = categorySum.CategoryName;
+            }
+        }
+
+
+    } else {
+        Console.WriteLine("No data");
+    }
 }
 
-@foreach (var x in Model)
-{
-    <p>@x.CategoryName</p>
-}
 
 <h1>Expenses</h1>
 <h5>
     Overview of your expenses
 </h5>
 <hr />
-<p>Total Spending: @(sumOfAll) €</p>
-<p>Biggest single purchase: @(biggestPurchaseAmount) €</p>
-<p>Most spent category: </p>
-<p>Average spending per day: @(averageSpending) €</p>
-<a href="expense/add"><button type="button" class="btn btn-dark">Add new expense</button></a>
-<button type="button" class="btn btn-dark" id="all">Show all your purchases</button>
-<button type="button" class="action-btn btn-dark" id="graphs">Show cool graphs</button>
+
+
+@if (sumOfAll == 0) {
+    <p>No data, add expenses to track your expenses.</p>
+    <a href="expense/add"><button type="button" class="btn btn-dark">Add new expense</button></a>
+} else {
+    <p>Total spending: @(sumOfAll) €</p> 
+    <p>Biggest single purchase: @(biggestPurchaseAmount) €, Category: @(biggestPurchaseCategory)</p>
+    <p>Most spent category: @(mostSpendCategory), total @(mostSpendCategoryAmount) €</p>
+    <p>Average spending per day: @(averageSpending) €</p> 
+   <a href="expense/add"><button type="button" class="btn btn-dark">Add new expense</button></a>
+    <button type="button" class="btn btn-dark" id="all">Show all your purchases</button>
+    <button type="button" class="action-btn btn-dark" id="graphs">Show cool graphs</button>  
+}
+
+
 <hr />
+
 
 <div id="render-container">
     <partial name="_AllPurchases" view-data="ViewData"/>

@@ -95,6 +95,69 @@ namespace ExpenseTracker666.Models
             return record;
         }
 
+        // väliaikainen
+        public static T SavetoCategory<T>(T record)
+        {
+            try
+            {
+                // taulun nimi objektista
+                var collection = database.GetCollection<T>(typeof(T).Name);
+
+
+                PropertyInfo nameProp = typeof(T).GetProperty("CategoryName");
+                string nameValue = nameProp.GetValue(record)?.ToString();
+
+                // Luo filtteri ja hae onko taulussa
+                // pakko olla fiksumpi tapa? Ainakin searchia voisi käyttää apu metodina, mutta nyt ei jaksanut implementoida
+                // ehkä sitäkin parempi ja siistimpi tapa varmasti on
+                var filter = Builders<T>.Filter.Eq("CategoryName", nameValue);
+                var existingRecord = collection.Find(filter).FirstOrDefault();
+
+
+                if (existingRecord != null)
+                {
+                    // ´Hae _id jo löytyvästä
+                    PropertyInfo idProp = existingRecord.GetType().GetProperty("_id");
+
+
+                    if (idProp != null)
+                    {
+                        var idValue = idProp.GetValue(existingRecord);
+
+                        // Jos property _id aseta tässä
+                        PropertyInfo recordIdProp = typeof(T).GetProperty("_id");
+
+                        // kolmas if aika kys setit
+                        if (recordIdProp != null)
+                        {
+                            recordIdProp.SetValue(record, idValue);
+                        }
+
+                        // luo filtteri replaceemiseen
+                        // ei voi muuta sanoa kuin vittu mikä syntaxi
+                        // no mut onneksi on nyt koodi esimerkki tallessa
+                        var filter2 = Builders<T>.Filter.Eq("_id", idValue);
+                        collection.ReplaceOne(filter2, record, new ReplaceOptions { IsUpsert = true });
+                        Console.WriteLine($"Record updated with _id: {idValue}");
+                    }
+                }
+                // jos ei oo taulussa case
+                else
+                {
+                    collection.InsertOne(record);
+                    Console.WriteLine($"{nameValue} not found in db, inserted new record.");
+                }
+
+                return record;
+
+            }
+            catch (Exception e) { Console.WriteLine(e); }
+
+            return record;
+        }
+
+
+
 
         public static bool CheckPassword(string username, string password)
         {
