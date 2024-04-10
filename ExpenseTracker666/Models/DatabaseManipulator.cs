@@ -158,18 +158,21 @@ namespace ExpenseTracker666.Models
         }
 
 
+        public static T Save<T>(string table, T record)
+        {
+            var mongotable = database.GetCollection<T>(table);
+            try { mongotable.InsertOne(record); } 
+            catch { Console.WriteLine("Error while saving");  }
+            return record;
+        }
+
 
 
         public static bool CheckPassword(string username, string password)
         {
-            if (database == null)
-            {
-                throw new InvalidOperationException("Database has not been initialized. Call Initialize first.");
-            }
 
             try
             {
-                // Assuming a 'Users' collection and it contains documents with 'Name' and 'Password' fields
                 var mongoCollection = database.GetCollection<BsonDocument>("Users");
                 var filter = Builders<BsonDocument>.Filter.Eq("Username", username) & Builders<BsonDocument>.Filter.Eq("Password", password);
 
@@ -215,10 +218,14 @@ namespace ExpenseTracker666.Models
         {
             var mongotable = database.GetCollection<Category>("Category");
             var filter = Builders<Category>.Filter.Eq("CategoryName", categoryName);
-            var user = mongotable.Find(filter).FirstOrDefault();
+            var category = mongotable.Find(filter).FirstOrDefault();
 
-            return user._id;
+            return category._id;
         }
+
+
+
+
 
 
         //public static ObjectId(string username)

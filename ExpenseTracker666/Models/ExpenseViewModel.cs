@@ -4,6 +4,7 @@ namespace ExpenseTracker666.Models
 {
     public class ExpenseViewModel
     {
+        public ObjectId ExpenseId {  get; set; } 
         public string Description { get; set; }
         public decimal Amount { get; set; }
         public DateTime ExpenseDate { get; set; }

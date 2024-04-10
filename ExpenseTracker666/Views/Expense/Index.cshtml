@@ -8,6 +8,7 @@
     decimal sumOfAll = 0;
     DateTime maxDate = @DateTime.Today;
     DateTime minDate;
+   
     double testi = 0;
     decimal averageSpending = 0;
     decimal mostSpendAmount = 0;
@@ -54,11 +55,6 @@
 <h5>
     Overview of your expenses
 </h5>
-
-@foreach (var x in Model) {
-    <p>@x.CategoryName, @x.CategoryId</p>
-}
-<hr />
 
 
 @if (sumOfAll == 0) {

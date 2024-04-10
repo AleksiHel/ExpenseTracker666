@@ -9,9 +9,10 @@ namespace ExpenseTracker666.Models
 
         public ObjectId _id { get; set; }
         [Required]
+        [BsonRepresentation(BsonType.Decimal128)]
         public decimal Amount { get; set; }
         [Required]
-        public string Description { get; set; }
+        public string? Description { get; set; }
         [Required]
         public DateTime ExpenseDate { get; set; }
         [Required]

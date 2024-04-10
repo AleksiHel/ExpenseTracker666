@@ -30,12 +30,12 @@ namespace ExpenseTracker666.Controllers
 
             var expenseViewModels = userData.Select(expense => new ExpenseViewModel
             {
+                ExpenseId = expense._id,
                 Amount = expense.Amount,
                 Description = expense.Description,
                 ExpenseDate = expense.ExpenseDate,
                 CategoryName = categoryDictionary[expense.CategoryId.ToString()],
-                CategoryId = expense.CategoryId,
-                UserName = User.Identity.Name,
+                UserName = User.Identity.Name
             }).ToList();
             
             return View(expenseViewModels);
@@ -59,19 +59,26 @@ namespace ExpenseTracker666.Controllers
                 return View(model);
             }
 
-            // formi kuntoon!!!!!!PERKELE
 
+            loggedInUserId = DatabaseManipulator.GetUsersID(User.Identity.Name);
+
+                
             var Expense = new Expense
             {
-                Amount = model.NewExpense.Amount,
-                Description = model.NewExpense.Description,
-                ExpenseDate = model.NewExpense.ExpenseDate,
-                UserId = loggedInUserId
+                Amount = model.Amount,
+                Description = model.Description,
+                ExpenseDate = model.ExpenseDate,
+                UserId = loggedInUserId,
+                // Hae backendistä Idn arvo kategorian perusteella
+               
+                CategoryId = DatabaseManipulator.GetCategoryId(model.CategoryName)
 
             };
 
+            DatabaseManipulator.Save("Expenses", Expense);
 
-            return RedirectToAction("Index");
+
+            return RedirectToAction("");
         }
 
         [Authorize]
