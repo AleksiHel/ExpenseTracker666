@@ -1,13 +1,14 @@
 ﻿@model List<ExpenseViewModel>
 
+<h5>All purchases</h5>
 <table class="table">
     <tr>
         <th>Amount</th>
         <th>Date</th>
         <th>Description</th>
         <th>Category</th>
-        <th></th>
-        <th></th>
+@*         <th></th>
+        <th></th> *@
     </tr>
     
     @foreach (var x in Model)
@@ -17,8 +18,8 @@
         <th>@x.ExpenseDate.ToShortDateString()</th>
         <th>@x.Description</th>
         <th>@x.CategoryName</th>
-            <th><button type="button" class="action-btn btn-dark" id="Edit">Edit</button>  </th>
-            <th><button type="button" class="action-btn btn-dark" id="Delete">Delete</button>  </th>
+@*             <th><button type="button" class="action-btn btn-dark" id="Edit">Edit</button>  </th>
+            <th><button type="button" class="action-btn btn-dark" id="Delete">Delete</button>  </th> *@
 
 
         </tr>

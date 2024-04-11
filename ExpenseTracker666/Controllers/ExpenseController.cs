@@ -13,6 +13,8 @@ namespace ExpenseTracker666.Controllers
         ObjectId loggedInUserId;
 
 
+
+
         [Authorize]
         public IActionResult Index()        
         {
@@ -37,8 +39,12 @@ namespace ExpenseTracker666.Controllers
                 CategoryName = categoryDictionary[expense.CategoryId.ToString()],
                 UserName = User.Identity.Name
             }).ToList();
-            
-            return View(expenseViewModels);
+
+            // Sort by date, reverse :)
+            expenseViewModels = expenseViewModels.OrderByDescending(x => x.ExpenseDate).ToList();
+
+
+            return View(expenseViewModels) ;
         }
 
 
@@ -69,8 +75,7 @@ namespace ExpenseTracker666.Controllers
                 Description = model.Description,
                 ExpenseDate = model.ExpenseDate,
                 UserId = loggedInUserId,
-                // Hae backendistä Idn arvo kategorian perusteella
-               
+                // Hae backendistä Idn arvo kategorian nimen perusteella
                 CategoryId = DatabaseManipulator.GetCategoryId(model.CategoryName)
 
             };
@@ -88,10 +93,35 @@ namespace ExpenseTracker666.Controllers
         }
 
         [Authorize]
-        public IActionResult _AllPurchases(int number)
+        public IActionResult GetAllPurchases()
         {
-            return PartialView();
+           // TODO DRY
+            var categories = DatabaseManipulator.GetAll<Category>("Category");
+            var categoryDictionary = categories.ToDictionary(c => c._id.ToString(), c => c.CategoryName);
+
+
+
+            loggedInUserId = DatabaseManipulator.GetUsersID(User.Identity.Name);
+            var userData = DatabaseManipulator.GetAllById<Expense>(loggedInUserId);
+
+
+
+
+            var expenseViewModels = userData.Select(expense => new ExpenseViewModel
+            {
+                ExpenseId = expense._id,
+                Amount = expense.Amount,
+                Description = expense.Description,
+                ExpenseDate = expense.ExpenseDate,
+                CategoryName = categoryDictionary[expense.CategoryId.ToString()],
+                UserName = User.Identity.Name
+            }).ToList();
+
+            // Sort by date :)
+            expenseViewModels = expenseViewModels.OrderByDescending(x => x.ExpenseDate).ToList();
+            return PartialView("_AllPurchases", expenseViewModels);
         }
+
 
     }
 }

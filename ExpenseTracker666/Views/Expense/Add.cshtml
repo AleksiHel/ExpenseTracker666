@@ -29,10 +29,10 @@
             <span asp-validation-for="CategoryName" class="text-danger"></span>
         </div>
 
-        <div class="form-group p-1">
+        <div class="form-group p-1 col-5">
             <label asp-for="Description">Description</label>
-            <textarea asp-for="Description" class="form-control" rows="4"></textarea>
-            <span asp-validation-for="Description"></span>
+            <textarea asp-for="Description" class="form-control" rows="2" maxlength="50"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
         </div>
 
         <button type="submit" class="btn btn-dark p-1 mt-1 mb-2 col-2">Add</button>

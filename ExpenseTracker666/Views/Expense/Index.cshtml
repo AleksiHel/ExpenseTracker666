@@ -61,25 +61,17 @@
     <p>No data, add expenses to track your expenses.</p>
     <a href="expense/add"><button type="button" class="btn btn-dark">Add new expense</button></a>
 } else {
-    <p>Total spending: @(sumOfAll) €</p> 
-    <p>Biggest single purchase: @(biggestPurchaseAmount) €, Category: @(biggestPurchaseCategory)</p>
-    <p>Most spent category: @(mostSpendCategory), total @(mostSpendCategoryAmount) €</p>
-    <p>Average spending per day: @(averageSpending) €</p> 
-   <a href="expense/add"><button type="button" class="btn btn-dark">Add new expense</button></a>
-    <button type="button" class="btn btn-dark" id="all">Show all your purchases</button>
+    <p><strong>Total spending:</strong> @(sumOfAll) €</p>
+    <p><strong>Biggest single purchase:</strong> @(biggestPurchaseAmount) €, Category: @(biggestPurchaseCategory)</p>
+    <p><strong>Most spent category:</strong> @(mostSpendCategory), total @(mostSpendCategoryAmount) €</p>
+    <p><strong>Average spending per day:</strong> @(averageSpending) €</p>
+    <a href="expense/add"><button type="button" class="btn btn-dark">Add new expense</button></a>
     <a href="expense/graphs"><button type="button" class="btn btn-dark">Show cool graphs</button></a>
 }
 
 
 <hr />
 
-
 <div id="render-container">
-    <partial name="_AllPurchases" view-data="ViewData"/>
+    <partial name="_SomePurchases" view-data="ViewData"/>
 </div>
-
-<script>
-    $(".action-btn").on("click", function () {
-        alert(this.id);
-    })
-</script>

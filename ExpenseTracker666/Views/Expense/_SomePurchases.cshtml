@@ -1,0 +1,69 @@
+﻿@model List<ExpenseViewModel>
+
+<h5>Latest purchases</h5>
+
+
+<table class="table">
+    <tr>
+        <th>Amount</th>
+        <th>Date</th>
+        <th>Description</th>
+        <th>Category</th>
+@*         <th></th>
+        <th></th> *@
+    </tr>
+
+    @if (Model.Count < 11)
+    {
+            @foreach (var x in Model)
+    {
+        <tr>
+            <th>@x.Amount €</th>
+            <th>@x.ExpenseDate.ToShortDateString()</th>
+            <th>@x.Description</th>
+            <th>@x.CategoryName</th>
+@*             <th><button type="button" class="action-btn btn-dark" id="Edit">Edit</button>  </th>
+            <th><button type="button" class="action-btn btn-dark" id="Delete">Delete</button>  </th> *@
+
+
+        </tr>
+        }
+    } else
+    {
+        @for (var i = 0; i < 10; i++)
+        {
+            <tr>
+                <th>@Model[i].Amount €</th>
+                <th>@Model[i].ExpenseDate.ToShortDateString()</th>
+                <th>@Model[i].Description</th>
+                <th>@Model[i].CategoryName</th>
+@*                 <th><button type="button" class="action-btn btn-dark" id="Edit">Edit</button>  </th>
+                <th><button type="button" class="action-btn btn-dark" id="Delete">Delete</button>  </th> *@
+
+
+            </tr>
+        }
+    }
+
+
+
+</table>
+<button type="button" class="action-btn btn-dark mb-3 p-2 border-1" id="all">Show all</button>
+
+<script>
+
+    $(document).ready(function () {
+        $("#all").click(function () {
+            $.ajax({
+                url: '@Url.Action("GetAllPurchases", "Expense")', // Adjust if your application is configured differently
+                type: 'GET',
+                success: function (data) {
+                    $('#render-container').html(data);
+                },
+                error: function () {
+                    alert("Error loading purchases.");
+                }
+            });
+        });
+    });
+</script>

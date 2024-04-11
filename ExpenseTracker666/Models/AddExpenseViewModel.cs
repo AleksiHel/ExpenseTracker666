@@ -11,13 +11,14 @@ namespace ExpenseTracker666.Models
         // TODO lisää DataManipulator classiin, että saa sieltä helposti uniikit, kun kuitenkin käytän useassa kohtaa tätä... DRY
         public List<Category> Categories { get; set; } = DatabaseManipulator.GetAll<Category>("Category").OrderBy(c => c.CategoryName).ToList();
 
-        [Required]
+        [Required(ErrorMessage = "Enter valid value")]
         public decimal Amount { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Enter valid description")]
         public string Description { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Choose valid date")]
         public DateTime ExpenseDate { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Choose valid category")]
+
         public string CategoryName { get; set; }
     }
 }
