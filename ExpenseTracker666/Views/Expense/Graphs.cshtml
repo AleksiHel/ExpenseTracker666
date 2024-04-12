@@ -1,7 +1,77 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model List<GraphViewModel>
+@using System.Text.Json
+
 @{
-}
+    // D
+    var uniqueCategories = Model.Select(x => x.CategoryName).Distinct();
+    var categorySums = Model
+    .GroupBy(x => x.CategoryName)
+    .ToDictionary(g => g.Key, g => g.Sum(item => item.Amount));
+
+    var sumsList = Model
+    .GroupBy(x => x.CategoryName)
+    .Select(g => g.Sum(item => item.Amount))
+    .ToList();
+
+    var jsonSumsList = JsonSerializer.Serialize(sumsList);
+    var jsonCategories = JsonSerializer.Serialize(uniqueCategories);
+
+    }
+
+
 
 <h1>Cool graphs</h1>
+<button type="button" class="btn btn-dark" id="allspendingbtn" onclick="allSpending()">All spending by category</button>
+<button type="button" class="btn btn-dark" id="spendingbymonth" onclick="spendingByMonth()">Spending by month</button>
+
+
+<div id="Chart">
+</div>
+<canvas id="chartId" aria-label="chart" height="500" width="800"></canvas>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+
+    var sumslist = @Html.Raw(jsonSumsList);
+    var categorieslist = @Html.Raw(jsonCategories);
+    var myChart;  // Declare this globally without initialization
+    var chrt = document.getElementById("chartId").getContext("2d");
+
+    function allSpending() {
+        document.getElementById("allspendingbtn").disabled = true;
+        document.getElementById("spendingbymonth").disabled = false;
+
+        document.getElementById("Chart").innerHTML = `<h5 class="mb-2 mt-3">All spending by category</h5>`;
+        if (myChart) {
+            myChart.destroy();
+        }
+
+        myChart = new Chart(chrt, {
+            type: 'doughnut',
+            data: {
+                labels: categorieslist,
+                datasets: [{
+                    label: "Total spendage in €",
+                    data: sumslist,
+                    hoverOffset: 5
+                }],
+            },
+            options: {
+                responsive: false,
+            },
+        });
+    }
+
+    function spendingByMonth() {
+        document.getElementById("allspendingbtn").disabled = false;
+        document.getElementById("spendingbymonth").disabled = true;
+
+        document.getElementById("Chart").innerHTML = `<h5 class="mb-2 mt-3">Spending by month</h5>`;
+        if (myChart) {
+            myChart.destroy();
+        }
+
+    }
+
+
+
+</script>

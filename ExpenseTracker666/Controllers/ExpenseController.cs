@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Core.Operations;
+using System.Text.Json;
+
 
 namespace ExpenseTracker666.Controllers
 {
@@ -89,7 +91,26 @@ namespace ExpenseTracker666.Controllers
         [Authorize]
         public IActionResult Graphs()
         {
-            return View();
+
+            var categories = DatabaseManipulator.GetAll<Category>("Category");
+            var categoryDictionary = categories.ToDictionary(c => c._id.ToString(), c => c.CategoryName);
+
+            loggedInUserId = DatabaseManipulator.GetUsersID(User.Identity.Name);
+            var userData = DatabaseManipulator.GetAllById<Expense>(loggedInUserId);
+
+            var graphViewModels = userData.Select(expense => new GraphViewModel
+            {
+                Amount = expense.Amount,
+                ExpenseDate = expense.ExpenseDate,
+                CategoryName = categoryDictionary[expense.CategoryId.ToString()],
+            }).ToList();
+
+
+            return View(graphViewModels);
+
+
+
+
         }
 
         [Authorize]

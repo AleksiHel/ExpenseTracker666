@@ -14,10 +14,6 @@ namespace ExpenseTracker666.Models
         public string CategoryName { get; set; }
         public ObjectId CategoryId { get; set; }
 
-        // Viewmodeli tuntee uniikit categoriat, että ne on valmiina addissa
-        // tartte luoda omaa viewmodelia sitten adille
-        // Ei tartte
-        //public List<Category> UniqueCategories { get; set; } = DatabaseManipulator.GetAll<Category>("Category").OrderBy(c => c.CategoryName).ToList();
     }
 
 

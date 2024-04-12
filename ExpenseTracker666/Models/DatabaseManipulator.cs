@@ -158,13 +158,7 @@ namespace ExpenseTracker666.Models
         }
 
 
-        public static T Save<T>(string table, T record)
-        {
-            var mongotable = database.GetCollection<T>(table);
-            try { mongotable.InsertOne(record); } 
-            catch { Console.WriteLine("Error while saving");  }
-            return record;
-        }
+
 
 
 
@@ -225,6 +219,13 @@ namespace ExpenseTracker666.Models
 
 
 
+        public static T Save<T>(string table, T record)
+        {
+            var mongotable = database.GetCollection<T>(table);
+            try { mongotable.InsertOne(record); } 
+            catch { Console.WriteLine("Error while saving");  }
+            return record;
+        }
 
 
 

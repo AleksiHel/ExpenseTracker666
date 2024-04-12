@@ -16,13 +16,14 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 
 DatabaseManipulator.Initialize(builder.Configuration);
 
-    var checkifdata = DatabaseManipulator.GetAll<Users>("Users");
+
+// remove if you don't want testdata
+var checkifdata = DatabaseManipulator.GetAll<Users>("Users");
 if (checkifdata.Count == 0)
 {
     Console.WriteLine("no test data found");
     TestDataGenerator.PopulateDb();
 }
-else Console.WriteLine("test data found");
 
 var app = builder.Build();
 
