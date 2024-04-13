@@ -27,14 +27,13 @@
         averageSpending = Math.Round(sumOfAll / ((decimal)testi +1), 2);
 
         var categorySums = Model
-            .GroupBy(x => x.CategoryName) // Assuming CategoryId uniquely identifies each category
+            .GroupBy(x => x.CategoryName)
             .Select(group => new
             {
-                CategoryName = group.First().CategoryName, // Assuming all items in the group have the same CategoryName
+                CategoryName = group.First().CategoryName,
                 TotalAmount = group.Sum(x => x.Amount)
             }).ToList();
 
-        // Iterate over each category sum to find the category with the highest total spend
         foreach (var categorySum in categorySums)
         {
             if (categorySum.TotalAmount > mostSpendCategoryAmount)
@@ -67,7 +66,7 @@
     <p><strong>Average spending per day:</strong> @(averageSpending) €</p>
     <a href="expense/add"><button type="button" class="btn btn-dark">Add new expense</button></a>
     <a href="expense/graphs"><button type="button" class="btn btn-dark">Show cool graphs</button></a>
-}
+
 
 
 <hr />
@@ -75,3 +74,4 @@
 <div id="render-container">
     <partial name="_SomePurchases" view-data="ViewData"/>
 </div>
+}

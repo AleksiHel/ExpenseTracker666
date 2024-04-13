@@ -1,4 +1,7 @@
 ﻿@model EditExpenseViewModel
+@{
+    var date = @Model.ExpenseDate.ToShortDateString();
+}
 
 <div class="container-sm p-3 " style="max-width: 500px;">
     <h1>Edit expense</h1>        
@@ -10,7 +13,7 @@
         <div class="form-group p-1 col-5">
 
             <label asp-for="Amount">Amount</label>
-            <input asp-for="Amount" type="number" class="form-control" id="amountInput" value="@Model.Amount" min="0.00" step="1">
+            <input asp-for="Amount" type="number" class="form-control" id="amountInput" value="@Model.Amount." min="0.00" step="1">
             <span asp-validation-for="Amount" class="text-danger"></span>
         </div>
 
@@ -39,7 +42,7 @@
             <span asp-validation-for="Description" class="text-danger"></span>
         </div>
 
-        <button type="submit" class="btn btn-dark p-1 mt-1 mb-2 col-2">Edit</button>
+        <button type="submit" class="btn btn-dark p-1 mt-1 mb-2 col-2">Save</button>
 
 
 
@@ -47,12 +50,16 @@
 </div>
 
 <script>
-    // Kalenterin asetuksia
     document.addEventListener("DOMContentLoaded", function () {
+        var modelDate = '@Model.ExpenseDate.ToString("yyyy-MM-dd")';
+
         var today = new Date();
         var formattedDate = today.toISOString().substr(0, 10);
         var dateInput = document.getElementById("dateInput");
+
         dateInput.max = formattedDate;
+
+        dateInput.value = modelDate;
     });
 </script>
 

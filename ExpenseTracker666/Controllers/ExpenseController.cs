@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Core.Operations;
+using MongoDB.Driver.Linq;
 using System.Text.Json;
 
 
@@ -76,7 +77,7 @@ namespace ExpenseTracker666.Controllers
             {
                 Amount = model.Amount,
                 Description = model.Description,
-                ExpenseDate = model.ExpenseDate,
+                ExpenseDate = model.ExpenseDate.AddDays(1),
                 UserId = loggedInUserId,
                 // Hae backendistä Idn arvo kategorian nimen perusteella
                 CategoryId = DatabaseManipulator.GetCategoryId(model.CategoryName)
@@ -187,7 +188,8 @@ namespace ExpenseTracker666.Controllers
                 _id = model.ExpenseId,
                 Amount = model.Amount,
                 Description = model.Description,
-                ExpenseDate = model.ExpenseDate,
+                // jostain syystä antaa 1 päivän aikasemman zzz, korjaa
+                ExpenseDate = model.ExpenseDate.AddDays(1),
                 UserId = loggedInUserId,
                 // Hae backendistä Idn arvo kategorian nimen perusteella
                 CategoryId = DatabaseManipulator.GetCategoryId(model.CategoryName)

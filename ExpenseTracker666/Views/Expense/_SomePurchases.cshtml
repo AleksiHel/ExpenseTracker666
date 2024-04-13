@@ -29,7 +29,9 @@
 
 
 
-        </tr>
+            </tr>
+            
+
         }
     } else
     {
@@ -49,13 +51,15 @@
 
             </tr>
         }
+
     }
 
 
 
 </table>
-<button type="button" class="action-btn btn-dark mb-3 p-2 border-1" id="all">Show all</button>
-
+@if (Model.Count > 10) {
+    <button type="button" class="action-btn btn-dark mb-3 p-2 border-1" id="all">Show all</button>
+}
 <script>
 
     $(document).ready(function () {

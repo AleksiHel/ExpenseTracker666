@@ -13,7 +13,7 @@
 
         <div class="form-group p-1 col-5">
             <label asp-for="ExpenseDate">Date</label>
-            <input asp-for="ExpenseDate" type="date" class="form-control" id="dateInput" placeholder="">
+            <input asp-for="ExpenseDate" type="date" class="form-control" id="dateInput">            
             <span asp-validation-for="ExpenseDate" class="text-danger"></span>
         </div>
 
@@ -41,13 +41,12 @@
 </div>
 
 <script>
-    // Kalenterin asetuksia
     document.addEventListener("DOMContentLoaded", function () {
         var today = new Date();
         var formattedDate = today.toISOString().substr(0, 10);
         var dateInput = document.getElementById("dateInput");
-        dateInput.value = formattedDate;
         dateInput.max = formattedDate;
+        dateInput.value = formattedDate;
     });
 </script>
 
