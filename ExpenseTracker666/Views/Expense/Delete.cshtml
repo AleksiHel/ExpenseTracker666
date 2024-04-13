@@ -1,0 +1,17 @@
+﻿@model EditExpenseViewModel
+
+<h1>Delete this entry?</h1>
+
+    <form asp-controller="Expense" asp-action="Delete" method="post" class="d-flex flex-column">
+    <input asp-for="ExpenseId" type="hidden" value="@Model.ExpenseId">
+
+
+<p><strong>Amount:</strong> @Model.Amount €</p>
+<p><strong>Description:</strong> @Model.Description</p>
+<p><strong>Date:</strong> @Model.ExpenseDate.ToShortDateString()</p>
+<p><strong>Category:</strong> @Model.CategoryName</p>
+    <div class="d-flex justify-content-start">
+        <button type="submit" class="btn btn-dark p-1 mt-1 mb-2 me-5 col-1">Delete</button>
+        <button type="button" class="btn btn-dark mt-1 mb-2 col-1" onclick="window.history.back();">Go Back</button>
+    </div>
+</form>

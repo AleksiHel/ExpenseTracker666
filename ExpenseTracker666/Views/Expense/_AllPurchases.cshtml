@@ -7,8 +7,8 @@
         <th>Date</th>
         <th>Description</th>
         <th>Category</th>
-@*         <th></th>
-        <th></th> *@
+         <th></th>
+         <th></th>
     </tr>
     
     @foreach (var x in Model)
@@ -18,8 +18,8 @@
         <th>@x.ExpenseDate.ToShortDateString()</th>
         <th>@x.Description</th>
         <th>@x.CategoryName</th>
-@*             <th><button type="button" class="action-btn btn-dark" id="Edit">Edit</button>  </th>
-            <th><button type="button" class="action-btn btn-dark" id="Delete">Delete</button>  </th> *@
+            <th><a href="expense/edit?id=@x.ExpenseId" class="btn btn-dark">Edit</a> </th>
+            <th><a href="expense/delete?id=@x.ExpenseId" class="btn btn-dark">Delete</a></th>
 
 
         </tr>

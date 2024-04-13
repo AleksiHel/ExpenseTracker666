@@ -9,8 +9,8 @@
         <th>Date</th>
         <th>Description</th>
         <th>Category</th>
-@*         <th></th>
-        <th></th> *@
+        <th></th>
+        <th></th>
     </tr>
 
     @if (Model.Count < 11)
@@ -22,8 +22,11 @@
             <th>@x.ExpenseDate.ToShortDateString()</th>
             <th>@x.Description</th>
             <th>@x.CategoryName</th>
-@*             <th><button type="button" class="action-btn btn-dark" id="Edit">Edit</button>  </th>
-            <th><button type="button" class="action-btn btn-dark" id="Delete">Delete</button>  </th> *@
+                <th><a href="Expense/edit?id=@x.ExpenseId" class="btn btn-dark">Edit</a> </th>
+                <th><a href="Expense/delete?id=@x.ExpenseId" class="btn btn-dark">Delete</a></th>
+
+
+
 
 
         </tr>
@@ -37,8 +40,11 @@
                 <th>@Model[i].ExpenseDate.ToShortDateString()</th>
                 <th>@Model[i].Description</th>
                 <th>@Model[i].CategoryName</th>
-@*                 <th><button type="button" class="action-btn btn-dark" id="Edit">Edit</button>  </th>
-                <th><button type="button" class="action-btn btn-dark" id="Delete">Delete</button>  </th> *@
+                <th><a href="Expense/edit?id=@Model[i].ExpenseId" class="btn btn-dark">Edit</a> </th>
+                <th><a href="Expense/delete?id=@Model[i].ExpenseId" class="btn btn-dark">Delete</a></th>
+
+
+
 
 
             </tr>
@@ -66,4 +72,7 @@
             });
         });
     });
+
+
+
 </script>

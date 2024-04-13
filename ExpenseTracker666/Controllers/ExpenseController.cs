@@ -18,9 +18,10 @@ namespace ExpenseTracker666.Controllers
 
 
         [Authorize]
-        public IActionResult Index()        
+        public IActionResult Index()
         {
-            
+
+
             var categories = DatabaseManipulator.GetAll<Category>("Category");
             var categoryDictionary = categories.ToDictionary(c => c._id.ToString(), c => c.CategoryName);
 
@@ -46,7 +47,7 @@ namespace ExpenseTracker666.Controllers
             expenseViewModels = expenseViewModels.OrderByDescending(x => x.ExpenseDate).ToList();
 
 
-            return View(expenseViewModels) ;
+            return View(expenseViewModels);
         }
 
 
@@ -70,7 +71,7 @@ namespace ExpenseTracker666.Controllers
 
             loggedInUserId = DatabaseManipulator.GetUsersID(User.Identity.Name);
 
-                
+
             var Expense = new Expense
             {
                 Amount = model.Amount,
@@ -116,7 +117,7 @@ namespace ExpenseTracker666.Controllers
         [Authorize]
         public IActionResult GetAllPurchases()
         {
-           // TODO DRY
+            // TODO DRY
             var categories = DatabaseManipulator.GetAll<Category>("Category");
             var categoryDictionary = categories.ToDictionary(c => c._id.ToString(), c => c.CategoryName);
 
@@ -142,7 +143,98 @@ namespace ExpenseTracker666.Controllers
             expenseViewModels = expenseViewModels.OrderByDescending(x => x.ExpenseDate).ToList();
             return PartialView("_AllPurchases", expenseViewModels);
         }
+        [Authorize]
+        [HttpGet]
+        public ActionResult Edit(ObjectId id)
+        {
 
+            var categories = DatabaseManipulator.GetAll<Category>("Category");
+            var categoryDictionary = categories.ToDictionary(c => c._id.ToString(), c => c.CategoryName);
+
+            Console.WriteLine(id);
+            var expense = DatabaseManipulator.GetExpenseById<Expense>(id);
+            Console.WriteLine(expense);
+
+
+            var model = new EditExpenseViewModel
+            {
+                Amount = expense[0].Amount,
+                Description = expense[0].Description,
+                ExpenseDate = expense[0].ExpenseDate,
+                CategoryName = categoryDictionary[expense[0].CategoryId.ToString()],
+                ExpenseId = id
+            };
+
+
+            return View(model);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> Edit(EditExpenseViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            loggedInUserId = DatabaseManipulator.GetUsersID(User.Identity.Name);
+
+            var x = model.ExpenseId;
+
+            var Expense = new Expense
+            {
+                _id = model.ExpenseId,
+                Amount = model.Amount,
+                Description = model.Description,
+                ExpenseDate = model.ExpenseDate,
+                UserId = loggedInUserId,
+                // Hae backendistä Idn arvo kategorian nimen perusteella
+                CategoryId = DatabaseManipulator.GetCategoryId(model.CategoryName)
+
+            };
+
+            DatabaseManipulator.EditExpense(Expense, model.ExpenseId);
+
+
+            return RedirectToAction("");
+        }
+
+        [Authorize]
+        public ActionResult Delete(ObjectId id)
+        {
+
+            var categories = DatabaseManipulator.GetAll<Category>("Category");
+            var categoryDictionary = categories.ToDictionary(c => c._id.ToString(), c => c.CategoryName);
+
+            Console.WriteLine(id);
+            var expense = DatabaseManipulator.GetExpenseById<Expense>(id);
+            Console.WriteLine(expense);
+
+
+            var model = new EditExpenseViewModel
+            {
+                Amount = expense[0].Amount,
+                Description = expense[0].Description,
+                ExpenseDate = expense[0].ExpenseDate,
+                CategoryName = categoryDictionary[expense[0].CategoryId.ToString()],
+                ExpenseId = id
+            };
+
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(EditExpenseViewModel model)
+        {
+
+
+            DatabaseManipulator.DeleteExpense(model.ExpenseId);
+
+
+            return RedirectToAction("");
+        }
 
     }
 }

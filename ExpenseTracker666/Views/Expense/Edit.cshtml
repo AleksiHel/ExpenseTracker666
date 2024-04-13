@@ -1,30 +1,34 @@
-﻿@model AddExpenseViewModel
-
+﻿@model EditExpenseViewModel
 
 <div class="container-sm p-3 " style="max-width: 500px;">
-    <h1>Add new expense</h1>
-    <form asp-controller="Expense" asp-action="Add" method="post" class="d-flex flex-column">
+    <h1>Edit expense</h1>        
+
+    <form asp-controller="Expense" asp-action="Edit" method="post" class="d-flex flex-column">
+        <input asp-for="ExpenseId" type="hidden" value="@Model.ExpenseId">
+
+
         <div class="form-group p-1 col-5">
-           
+
             <label asp-for="Amount">Amount</label>
-            <input asp-for="Amount" type="number" class="form-control" id="amountInput" value="1" min="0.00" step="0.01">
+            <input asp-for="Amount" type="number" class="form-control" id="amountInput" value="@Model.Amount" min="0.00" step="1">
             <span asp-validation-for="Amount" class="text-danger"></span>
         </div>
 
         <div class="form-group p-1 col-5">
             <label asp-for="ExpenseDate">Date</label>
-            <input asp-for="ExpenseDate" type="date" class="form-control" id="dateInput" placeholder="">
+            <input asp-for="ExpenseDate" type="date" class="form-control" id="dateInput" >
             <span asp-validation-for="ExpenseDate" class="text-danger"></span>
         </div>
 
         <div class="form-group p-1 col-5">
             <label asp-for="CategoryName">Category</label>
             <select asp-for="CategoryName" class="form-control">
-            @foreach (var category in Model.Categories) {
+                @foreach (var category in Model.Categories)
+                {
 
                     <option value="@category.CategoryName">@category.CategoryName</option>
 
-            }
+                }
             </select>
             <span asp-validation-for="CategoryName" class="text-danger"></span>
         </div>
@@ -35,7 +39,9 @@
             <span asp-validation-for="Description" class="text-danger"></span>
         </div>
 
-        <button type="submit" class="btn btn-dark p-1 mt-1 mb-2 col-2">Add</button>
+        <button type="submit" class="btn btn-dark p-1 mt-1 mb-2 col-2">Edit</button>
+
+
 
     </form>
 </div>
@@ -46,7 +52,6 @@
         var today = new Date();
         var formattedDate = today.toISOString().substr(0, 10);
         var dateInput = document.getElementById("dateInput");
-        dateInput.value = formattedDate;
         dateInput.max = formattedDate;
     });
 </script>

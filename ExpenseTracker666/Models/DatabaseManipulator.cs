@@ -4,6 +4,7 @@ using MongoDB.Driver;
 using MongoDB.Driver.Core.Authentication;
 using System.Diagnostics.Eventing.Reader;
 using System.Reflection;
+using static MongoDB.Driver.WriteConcern;
 
 namespace ExpenseTracker666.Models
 {
@@ -198,11 +199,21 @@ namespace ExpenseTracker666.Models
             return user._id;
         }
 
-        public static List<T> GetAllById<T>(ObjectId userID)
+        public static List<T> GetAllById<T>(ObjectId ID)
         {
             var mongotable = database.GetCollection<T>("Expenses");
 
-            var filter = Builders<T>.Filter.Eq("UserId", userID);
+            var filter = Builders<T>.Filter.Eq("UserId", ID);
+            var testi = mongotable.Find(filter).ToList();
+            return testi;
+
+        }
+
+       public static List<T> GetExpenseById<T>(ObjectId ID)
+        {
+            var mongotable = database.GetCollection<T>("Expenses");
+
+            var filter = Builders<T>.Filter.Eq("_id", ID);
             var testi = mongotable.Find(filter).ToList();
             return testi;
 
@@ -225,6 +236,37 @@ namespace ExpenseTracker666.Models
             try { mongotable.InsertOne(record); } 
             catch { Console.WriteLine("Error while saving");  }
             return record;
+        }
+
+
+        public static T EditExpense<T>(T record, ObjectId IdValue)
+        {
+            var mongotable = database.GetCollection<T>("Expenses");
+            var filter = Builders<T>.Filter.Eq("_id", IdValue);
+
+
+
+
+            try { mongotable.ReplaceOne(filter, record, new ReplaceOptions { IsUpsert = true }); }
+            catch { Console.WriteLine("Error while saving"); }
+            return record;
+        }
+
+        public static bool DeleteExpense(ObjectId IdValue)
+        {
+            var mongotable = database.GetCollection<Expense>("Expenses");
+            var filter = Builders<Expense>.Filter.Eq("_id", IdValue);
+
+            try
+            {
+                mongotable.DeleteOne(filter);
+            } catch
+                { Console.WriteLine("Error while deleting");
+                return false;
+            }
+
+            return true;
+
         }
 
 
